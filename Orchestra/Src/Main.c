@@ -14,16 +14,76 @@ Clock: 50MHz
 
 
 void SystemInit();
+void ShiftTest();
 
+void UpdateReg(uint8_t Byte0, uint8_t Byte1, uint8_t Byte2, uint8_t Byte3);
+
+//Depending on how many notes needed bit size can increase
+//1 Octave - 12 Notes - 16 bits - 4 bits unused
+//2 Octave - 24 Notes - 32 bits - 8 bits unused
+//3 Octave - 36 Notes - 64 bits - 16 bits unused
+
+uint64_t ORGANSTATE = 0x44332211;
+
+uint8_t bit = 0x01;
 int main(){
 
 	SystemInit();
 
-	uint8_t bit = 0x01;
+	uint8_t Byte0;
+	uint8_t Byte1;
+	uint8_t Byte2;
+	uint8_t Byte3;
+	
 
 	
 	while(1){
+		
+		//Shift ORGANSTATE into 8 BYTE format and extract information
+		Byte0 = (ORGANSTATE & 0xFF);
+		Byte1 = (uint8_t)((ORGANSTATE >> 8) & 0xFF);
+		Byte2 = (uint8_t) ((ORGANSTATE >> 16)& 0xFF);
+		Byte3 = (uint8_t)((ORGANSTATE >> 24)& 0xFF);
+		
+		//update the reg
+		UpdateReg(Byte0,Byte1,Byte2,Byte3);
+		
 
+
+	}
+	
+	
+
+	return 0;
+}
+//Update Reg
+void UpdateReg(uint8_t Byte0, uint8_t Byte1, uint8_t Byte2, uint8_t Byte3){
+
+	//when using more regs, will need to change to only update once
+	//unlatch then write data to reg, then latch to update reg
+	UnLatch();
+	SPI_Write(Byte0);
+	Latch_Pulse();
+	DelayMs(2000);
+	
+	UnLatch();
+	SPI_Write(Byte1);
+	Latch_Pulse();
+	DelayMs(2000);
+
+	UnLatch();
+	SPI_Write(Byte2);
+	Latch_Pulse();
+	DelayMs(2000);	
+	
+	UnLatch();
+	SPI_Write(Byte3);
+	Latch_Pulse();
+	DelayMs(2000);	
+}
+
+
+void ShiftTest(){
 		UnLatch();
 		SPI_Write(bit);
 		Latch_Pulse();
@@ -35,15 +95,8 @@ int main(){
 		}
 		
 	DelayMs(500);
-
-	}
 	
-	
-
-	return 0;
 }
-
-
 void SystemInit(){
 	PLL_Init();
 	SPI_Init();
