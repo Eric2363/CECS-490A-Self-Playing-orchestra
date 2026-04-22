@@ -435,6 +435,26 @@
               <FileType>5</FileType>
               <FilePath>..\Src\DelayTimer.h</FilePath>
             </File>
+            <File>
+              <FileName>MIDI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\MIDI.c</FilePath>
+            </File>
+            <File>
+              <FileName>MIDI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Src\MIDI.h</FilePath>
+            </File>
+            <File>
+              <FileName>UART0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\UART0.c</FilePath>
+            </File>
+            <File>
+              <FileName>UART0.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Src\UART0.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

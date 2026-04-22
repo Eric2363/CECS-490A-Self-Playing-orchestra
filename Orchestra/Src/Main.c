@@ -9,13 +9,15 @@ Clock: 50MHz
 #include "DelayTimer.h"
 #include "SPI.h"
 #include "Latch.h"
-
+#include "MIDI.h"
+#include "UART0.h"
 
 
 
 void SystemInit();
 void ShiftTest();
-
+void NoteOn(uint8_t note);
+void NoteOff(uint8_t note);
 void UpdateReg(uint8_t Byte0, uint8_t Byte1, uint8_t Byte2, uint8_t Byte3);
 
 //Depending on how many notes needed bit size can increase
@@ -38,6 +40,25 @@ int main(){
 
 	
 	while(1){
+		
+		if(UART0_Available()){
+			
+			uint8_t data = UART0_InChar();
+			
+			if(data == 0x09){
+				
+				data = UART0_InChar();
+				
+				NoteOn(data);
+			}
+			else if(data == 0x08){
+				data = UART0_InChar();
+				NoteOff(data);
+				
+			}
+			
+		}
+		
 		
 		//Shift ORGANSTATE into 8 BYTE format and extract information
 		Byte0 = (ORGANSTATE & 0xFF);
@@ -82,20 +103,12 @@ void UpdateReg(uint8_t Byte0, uint8_t Byte1, uint8_t Byte2, uint8_t Byte3){
 	DelayMs(2000);	
 }
 
+void NoteOn(uint8_t note){
+    ORGANSTATE |= ((uint64_t)1 << LUT(note));
+}
 
-void ShiftTest(){
-		UnLatch();
-		SPI_Write(bit);
-		Latch_Pulse();
-	
-		bit = bit <<1;
-		
-		if(bit == 0){
-			bit = 0x01;
-		}
-		
-	DelayMs(500);
-	
+void NoteOff(uint8_t note){
+    ORGANSTATE &= ~((uint64_t)1 << LUT(note));
 }
 void SystemInit(){
 	PLL_Init();
