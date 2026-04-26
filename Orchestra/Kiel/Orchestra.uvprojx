@@ -455,6 +455,16 @@
               <FileType>5</FileType>
               <FilePath>..\Src\UART0.h</FilePath>
             </File>
+            <File>
+              <FileName>MOSFET.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\MOSFET.c</FilePath>
+            </File>
+            <File>
+              <FileName>MOSFET.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Src\MOSFET.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
+#include "Latch.h"
 
 //Uses A2 for clock
 //USES A5 for data
@@ -53,3 +54,5 @@ uint8_t SPI_Read(void){
     while((SSI0_SR_R & 0x04) == 0){};  // wait until RX not empty
     return SSI0_DR_R;
 }
+
+
